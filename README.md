@@ -1,18 +1,23 @@
-# project_aburami# SOBRAMFA
+# Project Aburami
 
-Site oficial da Sociedade Brasileira de Medicina de Família.
+Site institucional desenvolvido com HTML, CSS e JavaScript.
 
-## Recursos
-- Design responsivo
-- Menu mobile interativo
-- Sistema de busca avançado
-- Navegação acessível
-
-## Tecnologias
+## 🚀 Tecnologias
 - HTML5
 - CSS3 (Tailwind CSS)
 - JavaScript (Vanilla)
 
-## Como executar
+## 📱 Funcionalidades
+- Design responsivo
+- Navegação suave
+- Busca rápida (Ctrl+K)
+- Menu mobile
+
+## 🌐 Demo
+[Ver site online](https://vihisantos.github.io/project_aburami/)
+
+## 🛠️ Desenvolvimento
 1. Clone o repositório
-2. Abra `index.html` no navegador
+2. Abra o `index.html` no navegador
+3. Faça suas alterações
+4. Commit e push para atualizar
