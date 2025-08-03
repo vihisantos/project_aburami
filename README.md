@@ -13,11 +13,5 @@ Site institucional desenvolvido com HTML, CSS e JavaScript.
 - Busca rápida (Ctrl+K)
 - Menu mobile
 
-## 🌐 Demo
+## 🌐 Site
 [Ver site online](https://vihisantos.github.io/project_aburami/)
-
-## 🛠️ Desenvolvimento
-1. Clone o repositório
-2. Abra o `index.html` no navegador
-3. Faça suas alterações
-4. Commit e push para atualizar
