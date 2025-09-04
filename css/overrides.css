@@ -1,0 +1,29 @@
+:root { --navy-600:#1e40af; }
+/* Desativa o "EMERGENCY TIMELINE VISIBILITY FIX" sem perder layout /
+section[id="historia"], section[id*="timeline"] {}
+.timeline-item {
+/* volta ao estado natural animável /
+opacity: 0;
+transform: translateY(20px);
+transition: opacity .6s ease, transform .6s ease;
+/ preserva o seu layout existente */
+.timeline-item.animate,
+.timeline-item.in { opacity: 1; transform: none; }
+/* Modais fecham de verdade quando aria-hidden="true" */
+.modal, [data-modal] {
+display: none;
+}
+.modal[aria-hidden="false"],
+[data-modal][aria-hidden="false"] {
+display: flex;
+}
+/* Botão voltar ao topo (coerente com seu estilo) */
+#backToTopBtn { transition: transform .2s ease, opacity .2s ease; }
+#backToTopBtn:not(.show) { transform: translateY(20px); opacity: 0; }
+#backToTopBtn.show { transform: translateY(0); opacity: 1; }
+/* Foco visível acessível, sem mudar estética */
+:focus-visible { outline: 2px solid #0ea5e9; outline-offset: 2px; }
+/* Links "PDF (em breve)" desabilitados */
+a[aria-disabled="true"], .is-disabled {
+opacity: .6; pointer-events: none; cursor: not-allowed;
+}

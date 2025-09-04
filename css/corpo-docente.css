@@ -1,0 +1,140 @@
+.pro-docente-card {
+  width: 100%;
+  max-width: 390px;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 6px 24px 0 rgba(30,64,175,.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s;
+}
+.pro-docente-card:hover {
+  transform: scale(1.025);
+  box-shadow: 0 12px 36px 0 rgba(30,64,175,.14);
+}
+
+.pro-docente-header {
+  position: relative;
+  height: 185px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+.pro-docente-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pro-docente-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #fde047;
+  color: #0f172a;
+  padding: 4px 16px;
+  font-size: .78rem;
+  font-weight: bold;
+  border-radius: .7rem;
+  letter-spacing: .01em;
+}
+
+.pro-docente-header-info {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  color: #fff;
+  text-shadow: 0 1px 7px #1115;
+}
+.pro-docente-header-info h3 {
+  font-size: 1.24rem;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+}
+.pro-docente-header-info p {
+  font-size: .96rem;
+  opacity: .95;
+  margin: 0;
+}
+
+.pro-docente-body {
+  padding: 20px 22px 18px 22px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+.pro-docente-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1e40af;
+}
+.pro-docente-tags {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.pro-docente-tag {
+  padding: 3px 11px;
+  border-radius: 9999px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: .85rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.pro-docente-tag.green { background: #d1fae5; color: #047857;}
+.pro-docente-tag.lightblue { background: #e0f2fe; color: #0ea5e9;}
+/* Se quiser outras cores, adicione */
+
+.pro-card-section {
+  background: #f6fafe;
+  border-radius: 10px;
+  padding: 13px 16px 10px 16px;
+  margin-bottom: 4px;
+}
+.pro-card-section:last-child {margin-bottom:0;}
+.pro-card-section h4 {
+  margin-bottom: 8px;
+  color: #094fa3;
+  font-size: .98rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.pro-card-section ul {
+  margin: 0;
+  padding-left: 14px;
+  color: #555973;
+  font-size: .93rem;
+}
+.pro-card-section li {
+  margin-bottom: 2px;
+  font-size:.93rem;
+  line-height:1.55;
+}
+
+.pro-docente-actions {
+  padding: 15px 18px;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.pro-docente-btn {
+  flex: 1 1 0;
+  text-align: center;
+  padding: 9px 2px;
+  border-radius: 13px;
+  font-size: .98rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background .16s;
+}
+.pro-docente-btn.cv { background: #1e40af; color: #fff; }
+.pro-docente-btn.cv:hover { background:#172554; }
+.pro-docente-btn.blog { background: #0ea5e9; color: #fff;}
+.pro-docente-btn.blog:hover { background: #0369a1;}

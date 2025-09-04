@@ -1,0 +1,48 @@
+.timeline-section {
+  padding: 4rem 0;
+  background: #f1f5f9;
+}
+.timeline-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.timeline-title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  margin-bottom: 0.7rem;
+}
+.timeline-desc {
+  color: #64748b;
+  font-size: 1.15rem;
+  margin-bottom: 1.4rem;
+}
+.timeline-filter {
+  margin-bottom: 2rem;
+}
+.timeline-filter button {
+  background: #e0e7ef;
+  color: #1e3a8a;
+  border: none;
+  border-radius: .7em;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 .5em;
+  padding: .5em 1.5em;
+  cursor: pointer;
+  transition: background .16s, color .16s;
+}
+.timeline-filter button:hover {
+  background: #93c5fd;
+  color: #172554;
+}
+.timeline-list {
+  position: relative;
+  /* Para visual timeline, depois adicione uma linha vertical central como quiser */
+}
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 3.2rem;
+  opacity: 0;
+  transform: translateY(60px);
+}
