@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portal do Aluno — SOBRAMFA</title>
+<meta name="description" content="Dashboard do aluno SOBRAMFA: compromissos, disciplinas, materiais e avisos." />
+<meta name="theme-color" content="#1e1b4b" />
+<link rel="icon" href="/sobramfa-website/assets/favicon.ico" />
+<!-- Tailwind CDN (sem build) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+container: { center: true, padding: '1rem' },
+extend: {
+colors: {
+navy: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#1e1b4b' },
+'light-blue': {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a'}
+},
+boxShadow: {
+card: '0 20px 35px -18px rgba(8,16,57,.35), 0 12px 20px -12px rgba(8,16,57,.25)'
+}
+}
+}
+}
+</script>
+<!-- Fonte -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{
+font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+}
+.card-shadow{
+box-shadow: 0 20px 35px -18px rgba(8,16,57,.35), 0 12px 20px -12px rgba(8,16,57,.25);
+}
+/* Sidebar (equivalente @apply sem build) */
+.sidebar-link{
+display:flex; align-items:center; justify-content:center; gap:.75rem;
+padding:.75rem; border-radius:.75rem; color:#4b5563;
+transition:background-color .2s ease, color .2s ease;
+}
+@media (min-width:1024px){ .sidebar-link{ justify-content:flex-start; } }
+.sidebar-link:hover{ background:#f5f5f5; color:#3730a3; }
+.sidebar-link[aria-current="true"]{ background:#eef2ff; color:#3730a3; }
+/* Badge */
+.badge{
+display:inline-flex; align-items:center; padding:.125rem .5rem; border-radius:9999px;
+font-size:.75rem; line-height:1rem; font-weight:600;
+}
+/* Line clamp sem plugin */
+.line-clamp-1{
+display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;
+}
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+<!-- Layout base: sidebar + topbar + conteúdo -->
+<div class="min-h-screen flex">
+<!-- Sidebar -->
+<aside id="sidebar" class="w-16 lg:w-64 bg-white border-r border-gray-100 py-4 flex flex-col sticky top-0 h-screen">
+<div class="px-3 lg:px-4 flex items-center gap-3 mb-6">
+<a href="/sobramfa-website/" class="w-10 h-10 rounded-lg bg-gradient-to-br from-light-blue-400 to-light-blue-600 shadow-lg flex items-center justify-center" aria-label="Início SOBRAMFA">
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+</a>
+<div class="hidden lg:block">
+<div class="text-navy-900 font-extrabold leading-tight">SOBRAMFA</div>
+<div class="text-[10px] text-gray-500 -mt-0.5">Portal do Aluno</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1 px-2" role="navigation" aria-label="Seções do portal">
+<a href="#" class="sidebar-link" aria-current="true">
+<svg class="w-5 h-5 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"/></svg>
+<span class="hidden lg:inline text-sm">Início</span>
+</a>
+<a href="#" class="sidebar-link">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5"/></svg>
+<span class="hidden lg:inline text-sm">Agenda</span>
+</a>
+<a href="#" class="sidebar-link">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"/></svg>
+<span class="hidden lg:inline text-sm">Disciplinas</span>
+</a>
+<a href="#" class="sidebar-link">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+<span class="hidden lg:inline text-sm">Financeiro</span>
+</a>
+<a href="#" class="sidebar-link">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79V8a2 2 0 00-2-2h-5l-2-2H8a2 2 0 00-2 2v12m13-7H5"/></svg>
+<span class="hidden lg:inline text-sm">Biblioteca</span>
+</a>
+<a href="#" class="sidebar-link">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+<span class="hidden lg:inline text-sm">Mensagens</span>
+</a>
+</nav>
+<div class="mt-auto px-3 lg:px-4">
+<button id="collapseSidebar" class="w-full text-xs text-gray-500 hover:text-navy-700 bg-gray-100 hover:bg-gray-200 rounded-lg py-2 transition">
+Recolher barra
+</button>
+</div>
+</aside>
+
+<!-- Conteúdo -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Topbar -->
+<header class="bg-white border-b border-gray-100 sticky top-0 z-10">
+<div class="container flex items-center justify-between py-3 gap-3">
+<!-- Mobile: abrir sidebar -->
+<button id="openSidebar" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100" aria-label="Abrir menu">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<!-- Busca -->
+<div class="hidden md:flex items-center gap-3 flex-1 max-w-2xl">
+<div class="relative flex-1">
+<input type="search" placeholder="Buscar no portal..." class="w-full rounded-xl border border-gray-200 pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-light-blue-500 focus:border-transparent" />
+<svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+</div>
+</div>
+<!-- Ações -->
+<div class="flex items-center gap-2">
+<button class="hidden md:inline-flex items-center gap-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-xl">
+<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M12 14v7m0-7a4 4 0 110-8 4 4 0 010 8z"/></svg>
+Ambiente SOBRAMFA
+</button>
+<button class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 relative" aria-label="Notificações">
+<svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5"/></svg>
+<span class="absolute -top-0.5 -right-0.5 bg-red-600 text-white text-[10px] leading-none rounded-full px-1">3</span>
+</button>
+<button class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl px-2 py-1" aria-label="Perfil do usuário">
+<img src="/sobramfa-website/assets/imgs/config/avatar-aluno.jpg" alt="Foto do usuário" class="w-8 h-8 rounded-full object-cover" />
+<span class="hidden md:inline text-sm font-medium text-gray-700">Usuário</span>
+</button>
+</div>
+</div>
+</header>
+
+<!-- Wrapper cinza -->
+<div class="bg-gray-100/70">
+<div class="container py-6">
+<!-- Título -->
+<h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-4">Olá, veja seus compromissos</h1>
+
+<!-- Compromissos -->
+<section class="mb-6">
+<div class="flex items-center justify-between mb-2">
+<div class="text-sm md:text-base font-semibold text-gray-800">
+Meus compromissos - <span id="data-hoje">Quinta-feira, 04 de setembro</span>
+</div>
+<a href="../index.html" class="text-sm text-light-blue-700 hover:text-light-blue-900 font-semibold">Voltar - temporário</a>
+</div>
+<div class="bg-white border border-gray-100 rounded-xl p-4 card-shadow">
+<p class="text-sm text-gray-700">Você ainda não tem nenhum compromisso pra hoje</p>
+</div>
+</section>
+
+<!-- Disciplinas / UCs -->
+<section class="mb-8">
+<div class="flex items-center justify-between mb-3">
+<h2 class="text-lg md:text-xl font-bold text-gray-800">Minhas UCs e Disciplinas</h2>
+<a href="#" class="text-sm text-light-blue-700 hover:text-light-blue-900 font-semibold">Ir para Minhas UCs e Disciplinas</a>
+</div>
+
+<div class="space-y-4">
+<!-- Card 1 -->
+<article class="bg-white border border-gray-100 rounded-xl card-shadow overflow-hidden">
+<div class="grid grid-cols-4">
+<div class="col-span-4 md:col-span-1 relative min-h-[120px] bg-light-blue-50">
+<img src="/sobramfa-website/assets/imgs/cursos/thumb-uc01.jpg" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+<div class="absolute bottom-2 left-2 badge bg-black/60 text-white">DL - DIGITAL LEARNING</div>
+</div>
+<div class="col-span-4 md:col-span-3 p-4">
+<div class="text-xs text-gray-500">DL01-ENC01-828 • Encontros Síncronos</div>
+<h3 class="text-base md:text-lg font-bold text-gray-800">PLENÁRIO</h3>
+<p class="text-sm text-gray-600 line-clamp-1">Encontro Síncrono Plenária — Sistemas, Comunicação e Humanismo</p>
+<div class="mt-3">
+<div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+<span>4% Concluído</span><span>Meta: 12 aulas</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-2">
+<div class="bg-light-blue-600 h-2 rounded-full" style="width: 4%;"></div>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13"/></svg>
+Conteúdo
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5"/></svg>
+Calendário
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14"/></svg>
+Material
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 20h10a2 2 0 002-2V8m-2-5H7a2 2 0 00-2 2v14"/></svg>
+Avaliações
+</a>
+</div>
+</div>
+</div>
+</article>
+
+<!-- Card 2 -->
+<article class="bg-white border border-gray-100 rounded-xl card-shadow overflow-hidden">
+<div class="grid grid-cols-4">
+<div class="col-span-4 md:col-span-1 relative min-h-[120px] bg-purple-50">
+<img src="/sobramfa-website/assets/imgs/cursos/thumb-uc02.jpg" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+<div class="absolute bottom-2 left-2 badge bg-black/60 text-white">DL - DIGITAL LEARNING</div>
+</div>
+<div class="col-span-4 md:col-span-3 p-4">
+<div class="text-xs text-gray-500">DL01-64498-2025 • Híbrido</div>
+<h3 class="text-base md:text-lg font-bold text-gray-800">INOVAÇÃO, SUSTENTABILIDADE E COMPETITIVIDADE</h3>
+<p class="text-sm text-gray-600 line-clamp-1">Curso tecnólogo — análise e desenvolvimento de sistemas • SOBRAMFA</p>
+<div class="mt-3">
+<div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+<span>42% Concluído</span><span>Progresso</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-2">
+<div class="bg-green-600 h-2 rounded-full" style="width: 42%;"></div>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13"/></svg>
+Conteúdo
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5"/></svg>
+Calendário
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14"/></svg>
+Material
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg py-2 text-sm">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 20h10a2 2 0 002-2V8m-2-5H7a2 2 0 00-2 2v14"/></svg>
+Avaliações
+</a>
+</div>
+</div>
+</div>
+</article>
+</div>
+</section>
+
+<!-- Atalhos + Avisos -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-white border border-gray-100 rounded-xl card-shadow p-4">
+<h3 class="text-base font-bold text-gray-800 mb-3">Atalhos</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<a href="#" class="flex items-center justify-center gap-2 bg-navy-50 hover:bg-navy-100 text-navy-900 rounded-xl py-3 transition text-sm font-medium">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m-4-4h8"/></svg>
+Nova Solicitação
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-light-blue-50 hover:bg-light-blue-100 text-light-blue-900 rounded-xl py-3 transition text-sm font-medium">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14"/></svg>
+Agenda
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-green-50 hover:bg-green-100 text-green-900 rounded-xl py-3 transition text-sm font-medium">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
+Encontros
+</a>
+<a href="#" class="flex items-center justify-center gap-2 bg-yellow-50 hover:bg-yellow-100 text-yellow-900 rounded-xl py-3 transition text-sm font-medium">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2"/></svg>
+Financeiro
+</a>
+</div>
+</div>
+
+<div class="bg-white border border-gray-100 rounded-xl card-shadow p-4">
+<h3 class="text-base font-bold text-gray-800 mb-3">Avisos</h3>
+<ul class="space-y-3 text-sm">
+<li class="border-b border-gray-100 pb-3">
+<div class="font-medium text-gray-800">Atualização da Plataforma</div>
+<div class="text-gray-500">Quarta, 18:00 — possível instabilidade de 15min</div>
+</li>
+<li class="border-b border-gray-100 pb-3">
+<div class="font-medium text-gray-800">Entrega de atividade</div>
+<div class="text-gray-500">Prazo prorrogado até 10/09</div>
+</li>
+<li>
+<div class="font-medium text-gray-800">Aulas Híbridas</div>
+<div class="text-gray-500">Verifique materiais atualizados</div>
+</li>
+</ul>
+</div>
+</section>
+
+<!-- Rodapé -->
+<footer class="text-xs text-gray-500 mt-8 py-6">
+© 2025 SOBRAMFA • Portal do Aluno — Todos os direitos reservados
+</footer>
+</div>
+</div>
+</main> </div>
+
+<!-- JS: interação mínima -->
+<script>
+// Data "Meus compromissos - {data}"
+(function setHoje() {
+const el = document.getElementById('data-hoje');
+if (!el) return;
+const now = new Date();
+const fmt = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+let s = fmt.format(now);
+el.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+})();
+
+// Sidebar: recolher/expandir (desktop) e abrir/fechar (mobile)
+const sidebar = document.getElementById('sidebar');
+const collapseBtn = document.getElementById('collapseSidebar');
+const openBtn = document.getElementById('openSidebar');
+
+collapseBtn?.addEventListener('click', () => {
+sidebar.classList.toggle('w-16');
+sidebar.classList.toggle('lg:w-64');
+});
+
+const mq = window.matchMedia('(max-width: 1023px)');
+function setupMobileSidebar(enabled) {
+if (enabled) {
+sidebar.classList.add('fixed','z-20','left-0','top-0','transition','duration-200','ease-out','-translate-x-full');
+openBtn?.addEventListener('click', toggleSidebar);
+} else {
+sidebar.classList.remove('fixed','z-20','left-0','top-0','transition','duration-200','ease-out','-translate-x-full');
+openBtn?.removeEventListener('click', toggleSidebar);
+}
+}
+function toggleSidebar() { sidebar.classList.toggle('-translate-x-full'); }
+
+setupMobileSidebar(mq.matches);
+mq.addEventListener('change', (e) => setupMobileSidebar(e.matches));
+</script>
+</body>
+</html>

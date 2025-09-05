@@ -84,26 +84,79 @@ io.unobserve(en.target);
 });
 }, { threshold: .2 });
 $$('.fade-in, .timeline-item').forEach(el => io.observe(el));
-// 5) Timeline: abrir modal ao clicar no ano (mantendo seu design)
-const modalYear = ('#yearModal');
-const modalYearContent = ('#modalContent');
-function openYear(year){
-if (!modalYear || !modalYearContent) return;
-modalYearContent.innerHTML = <div class="space-y-4"> <h3 class="text-2xl font-bold">Ano ${year}</h3> <p>Conteúdo ilustrativo. Os documentos e fotos entram aqui.</p> <ul class="list-disc pl-5"> <li>Evento principal do ano.</li> <li>Publicação relevante.</li> <li>Material em PDF <a href="#" class="btn btn--ghost is-disabled" data-pdf="pending" aria-disabled="true">PDF (em breve)</a></li> </ul> </div>;
-openModal(modalYear);
+
+// === 5) BEGIN PATCH: modal lazy‑load (year/decade) ===
+
+const MODAL_URL = 'modals/year-modal.html';
+
+let yearModalLoaded = false;
+
+async function ensureYearModalLoaded() {
+  if (document.getElementById('yearModal')) {
+    yearModalLoaded = true;
+    return;
+  }
+  const res = await fetch(MODAL_URL, { cache: 'no-cache' });
+  const html = await res.text();
+  document.body.insertAdjacentHTML('beforeend', html);
+  yearModalLoaded = true;
+
+  // Eventos de fechar
+  const closeBtn = document.getElementById('closeYearModal');
+  if (closeBtn && !closeBtn.dataset.bound) {
+    closeBtn.dataset.bound = '1';
+    closeBtn.addEventListener('click', closeYearModal);
+  }
+  const overlay = document.getElementById('yearModal');
+  overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeYearModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeYearModal(); });
 }
-// Usa seus botões .year-clickable e qualquer [data-year]
-$$('.year-clickable,[data-year]').forEach(btn => {
-if (btn.dataset.bound) return;
-btn.dataset.bound = '1';
-btn.addEventListener('click', (e) => {
-e.preventDefault();
-const year = btn.getAttribute('data-year') || btn.textContent?.trim();
-openYear(year || '—');
+
+function closeYearModal() {
+  const el = document.getElementById('yearModal');
+  if (!el) return;
+  el.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+async function openYearModal(year) {
+  await ensureYearModalLoaded();
+
+  // Reaproveita seus dados globais (yearData / decadesData)
+  const data =
+    (window.decadesData && window.decadesData[year]) ||
+    (window.yearData && window.yearData[year]) || {};
+
+  const headerEl  = document.getElementById('modalHeader');
+  const yearEl    = document.getElementById('modalYear');
+  const titleEl   = document.getElementById('modalTitle');
+  const contentEl = document.getElementById('modalContent');
+
+  if (yearEl)  yearEl.textContent  = year || '';
+  if (titleEl) titleEl.textContent = data.title || '';
+  if (headerEl) headerEl.className = `bg-gradient-to-r ${data.color || 'from-blue-600 to-purple-600'} text-white p-6 rounded-t-2xl`;
+  if (contentEl) contentEl.innerHTML = data.content || '<p class="text-gray-700">Sem conteúdo disponível para este período.</p>';
+
+  const modal = document.getElementById('yearModal');
+  modal?.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+// Liga os cliques da timeline ao novo openYearModal
+$$('.year-clickable, [data-year]').forEach(btn => {
+  if (btn.dataset.bound) return;
+  btn.dataset.bound = '1';
+  btn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const year = btn.getAttribute('data-year') || btn.textContent?.trim();
+    await openYearModal(year || '');
+  });
 });
-});
-// Fecha modal do ano ao clicar fora
-modalYear?.addEventListener('click', (e) => { if (e.target === modalYear) closeModal(modalYear); });
+// Deixe a função disponível para o onclick do HTML
+window.openYearModal = openYearModal;
+
+// === END PATCH: modal lazy‑load (year/decade) ===
+
 // 6) PDF “em breve” (em qualquer link marcado como pending)
 function wirePendingPDF(scope=document){
 $('[data-pdf="pending"]', scope).forEach(a=>{
